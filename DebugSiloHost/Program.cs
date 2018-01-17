@@ -15,7 +15,7 @@ namespace DebugSiloHost
         {
             // First, configure and start a local silo
             var siloConfig = ClusterConfiguration.LocalhostPrimarySilo();
-            siloConfig.AddSimpleMessageStreamProvider("ApplesStreamProvider");
+            siloConfig.AddSimpleMessageStreamProvider("ApplesStreamProvider", fireAndForgetDelivery: true);
             siloConfig.AddMemoryStorageProvider();
             siloConfig.AddMemoryStorageProvider("PubSubStore");
             var silo = new SiloHost("TestSilo", siloConfig);

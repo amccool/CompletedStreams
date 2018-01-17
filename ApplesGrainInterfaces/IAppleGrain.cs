@@ -10,6 +10,8 @@ namespace ApplesGrainInterfaces
     {
         Task SayApple();
 
-        Task SubscribeToAppleStream();
+        Task SubscribeToAppleStream(string appleStreamToSubscribeTo);
+
+        Task LoadFakeConfig(string fakeConfig);
     }
 }
