@@ -7,6 +7,8 @@ using ApplesGrainInterfaces;
 using Orleans;
 using Orleans.Runtime.Configuration;
 using Orleans.Streams;
+using Orleans.Streams.Core;
+using Orleans.Streams.PubSub;
 
 namespace BananasPoker
 {
@@ -32,6 +34,8 @@ namespace BananasPoker
             {
                 Console.WriteLine("Enter 'Say(A)pple' to have a grain say Apple");
                 Console.WriteLine("Enter 'Send(S)treamMessage' to send a stream message");
+                Console.WriteLine("Enter '(C)omplete' to complete the stream");
+                Console.WriteLine("Enter '(R)ekSubscriptions' to monkey with subscription manager");
                 Console.WriteLine("Enter 'E(x)it' to stop");
                 string option = Console.ReadLine();
 
@@ -49,6 +53,23 @@ namespace BananasPoker
                         string messageToSend = Console.ReadLine();
                         await applesStream.OnNextAsync(messageToSend);
                         continue;
+                    case "Complete":
+                    case "C":
+                    case "c":
+                        await applesStream.OnCompletedAsync();
+                        continue;
+                    case "RekSubscriptions":
+                    case "R":
+                    case "r":
+                        applesStreamProvider.TryGetStreamSubscrptionManager(out var manager);
+                        IStreamIdentity applesStreamIdentity = new StreamIdentity(appleKey, "ApplesStream");
+                        var applesStreamSubscriptions = await manager.GetSubscriptions("ApplesStreamProvider", applesStreamIdentity);
+                        foreach (var subscription in applesStreamSubscriptions)
+                        {
+                            await manager.RemoveSubscription(subscription.StreamProviderName, subscription.StreamId, subscription.SubscriptionId);
+                        }
+                        var applesStreamSubscriptionsAfterRemoval = await manager.GetSubscriptions("ApplesStreamProvider", applesStreamIdentity);
+                        continue;
                     case "Exit":
                     case "X":
                     case "x":
@@ -60,6 +81,11 @@ namespace BananasPoker
 
                 break;
             }
+
+            //We're done now, so let's mark the stream completed, and close out our client
+            await applesStream.OnCompletedAsync();
+            
+            await client.Close();
         }
     }
 }
