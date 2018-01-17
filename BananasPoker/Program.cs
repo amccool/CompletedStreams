@@ -19,9 +19,13 @@ namespace BananasPoker
 
             await client.Connect();
 
+            Guid appleKey = Guid.NewGuid();
+
             while (true)
             {
-                IAppleGrain 
+                IAppleGrain myAppleGrain = client.GetGrain<IAppleGrain>(appleKey);
+
+                await myAppleGrain.SayApple();
             }
         }
     }
