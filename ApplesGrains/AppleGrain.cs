@@ -21,7 +21,7 @@ namespace ApplesGrains
 
         public Task SayApple()
         {
-            Console.WriteLine($"{DateTime.UtcNow}: Apple!");
+            Console.WriteLine($"{nameof(AppleGrain)}-{this.GetPrimaryKey()} --- {DateTime.UtcNow}: Apple!");
 
             return Task.CompletedTask;
         }
@@ -32,9 +32,9 @@ namespace ApplesGrains
 
             IAsyncStream<string> applesStream = applesStreamProvider.GetStream<string>(this.GetPrimaryKey(), "ApplesStream");
 
-            Console.WriteLine($"Subscribing to stream {this.GetPrimaryKey()}-ApplesStream");
+            Console.WriteLine($"{nameof(AppleGrain)}-{this.GetPrimaryKey()} --- Subscribing to stream {this.GetPrimaryKey()}-ApplesStream");
 
-            _applesStreamHandle = await applesStream.SubscribeAsync(async (x, y) => Console.WriteLine($"{DateTime.UtcNow}: {x}"),
+            _applesStreamHandle = await applesStream.SubscribeAsync(async (x, y) => Console.WriteLine($"{nameof(AppleGrain)}-{this.GetPrimaryKey()} --- {DateTime.UtcNow}: {x}"),
                 async error => Console.WriteLine($"Error: {error.StackTrace}"),
                 async () => await StreamCompleted());
 
@@ -43,7 +43,7 @@ namespace ApplesGrains
 
         private async Task StreamCompleted()
         {
-            Console.WriteLine($"My stream completed!");
+            Console.WriteLine($"{nameof(AppleGrain)}-{this.GetPrimaryKey()} --- My stream completed!");
 
             await _applesStreamHandle.UnsubscribeAsync();
 

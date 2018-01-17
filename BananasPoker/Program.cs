@@ -39,14 +39,16 @@ namespace BananasPoker
                 {
                     case "SayApple":
                     case "A":
+                    case "a":
                         await myAppleGrain.SayApple();
-                        break;
+                        continue;
                     case "SendStreamMessage":
                     case "S":
+                    case "s":
                         Console.Write("\nEnter message to send:");
                         string messageToSend = Console.ReadLine();
                         await applesStream.OnNextAsync(messageToSend);
-                        break;
+                        continue;
                     case "Exit":
                     case "X":
                     case "x":
