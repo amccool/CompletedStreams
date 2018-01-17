@@ -34,9 +34,11 @@ namespace ApplesGrains
 
             Console.WriteLine($"Subscribing to stream {this.GetPrimaryKey()}-ApplesStream");
 
-            _applesStreamHandle = await applesStream.SubscribeAsync(async (x, y) => Console.WriteLine(x),
+            _applesStreamHandle = await applesStream.SubscribeAsync(async (x, y) => Console.WriteLine($"{DateTime.UtcNow}: {x}"),
                 async error => Console.WriteLine($"Error: {error.StackTrace}"),
                 async () => await StreamCompleted());
+
+            Console.WriteLine($"{nameof(AppleGrain)}-{this.GetPrimaryKey()} --- Subscribed to stream {this.GetPrimaryKey()}-ApplesStream");
         }
 
         private async Task StreamCompleted()
@@ -44,6 +46,8 @@ namespace ApplesGrains
             Console.WriteLine($"My stream completed!");
 
             await _applesStreamHandle.UnsubscribeAsync();
+
+            Console.WriteLine($"{nameof(AppleGrain)}-{this.GetPrimaryKey()} --- Unsubscribed from stream");
         }
     }
 }
