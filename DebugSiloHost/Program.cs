@@ -20,13 +20,7 @@ namespace DebugSiloHost
             silo.StartOrleansSilo();
 
             Console.WriteLine("Silo started.");
-
-            // Then configure and connect a client.
-            var clientConfig = ClientConfiguration.LocalhostSilo();
-            var client = new ClientBuilder().UseConfiguration(clientConfig).Build();
-            client.Connect().Wait();
-
-            Console.WriteLine("Client connected.");
+            
 
             //
             // This is the place for your test code.
@@ -36,7 +30,6 @@ namespace DebugSiloHost
             Console.ReadLine();
 
             // Shut down
-            client.Close();
             silo.ShutdownOrleansSilo();
         }
     }
