@@ -11,5 +11,7 @@ namespace ApplesGrainInterfaces
         Task SayApple();
 
         Task SubscribeToAppleStream();
+
+        Task MarkYourselfForDeactivation();
     }
 }

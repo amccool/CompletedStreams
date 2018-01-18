@@ -18,6 +18,7 @@ namespace DebugSiloHost
             siloConfig.AddSimpleMessageStreamProvider("ApplesStreamProvider");
             siloConfig.AddMemoryStorageProvider();
             siloConfig.AddMemoryStorageProvider("PubSubStore");
+            siloConfig.Globals.Application.SetDefaultCollectionAgeLimit(TimeSpan.FromMinutes(1));
             var silo = new SiloHost("TestSilo", siloConfig);
             silo.InitializeOrleansSilo();
             silo.StartOrleansSilo();

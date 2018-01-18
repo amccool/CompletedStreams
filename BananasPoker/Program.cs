@@ -26,6 +26,8 @@ namespace BananasPoker
 
             IAppleGrain myAppleGrain = client.GetGrain<IAppleGrain>(appleKey);
 
+            await myAppleGrain.SubscribeToAppleStream();
+
             IStreamProvider applesStreamProvider = client.GetStreamProvider("ApplesStreamProvider");
 
             IAsyncStream<string> applesStream = applesStreamProvider.GetStream<string>(appleKey, "ApplesStream");
@@ -36,6 +38,7 @@ namespace BananasPoker
                 Console.WriteLine("Enter 'Send(S)treamMessage' to send a stream message");
                 Console.WriteLine("Enter '(C)omplete' to complete the stream");
                 Console.WriteLine("Enter '(R)ekSubscriptions' to monkey with subscription manager");
+                Console.WriteLine("Enter '(D)eactivate' to deactivate yourself");
                 Console.WriteLine("Enter 'E(x)it' to stop");
                 string option = Console.ReadLine();
 
@@ -57,6 +60,11 @@ namespace BananasPoker
                     case "C":
                     case "c":
                         await applesStream.OnCompletedAsync();
+                        continue;
+                    case "Deactivate":
+                    case "D":
+                    case "d":
+                        await myAppleGrain.MarkYourselfForDeactivation();
                         continue;
                     case "RekSubscriptions":
                     case "R":
